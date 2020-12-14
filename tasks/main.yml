@@ -1,0 +1,4 @@
+---
+
+- name: nvm (Node Version Manager) is installed.
+  include_tasks: nvm.yml

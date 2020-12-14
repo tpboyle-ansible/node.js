@@ -1,0 +1,39 @@
+---
+
+##  CHECK IF NVM IS INSTALLED
+
+- name: nvm is installed.
+  stat:
+    path: "~/.nvm"
+  register: stat_nvm
+
+
+##  INSTALL NVM IF NEEDED
+
+- name: download nvm if needed.
+  get_url:
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh
+    dest: /nvm_install.sh
+    mode: '0775'
+  when: not stat_nvm.stat.exists
+
+- name: install nvm if needed.
+  become: yes
+  become_user: patrick
+  shell: /nvm_install.sh
+  when: not stat_nvm.stat.exists
+  
+- name: set environment variables if needed.
+  become: yes
+  become_user: patrick
+  shell: |
+     export NVM_DIR="$HOME/.nvm"
+     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  when: not stat_nvm.stat.exists
+
+- name: delete nvm installation file.
+  file:
+    path: /nvm_install.sh
+    state: absent
+  when: not stat_nvm.stat.exists
