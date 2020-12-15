@@ -19,13 +19,13 @@
 
 - name: install nvm if needed.
   become: yes
-  become_user: patrick
+  become_user: "{{ install_for }}"
   shell: /nvm_install.sh
   when: not stat_nvm.stat.exists
   
 - name: set environment variables if needed.
   become: yes
-  become_user: patrick
+  become_user: "{{ install_for }}"
   shell: |
      export NVM_DIR="$HOME/.nvm"
      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

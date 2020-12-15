@@ -3,5 +3,7 @@
   hosts: all
   become: yes
 
+  vars:
+    - install_for: "regular"
   tasks:
     - include_tasks: tasks/main.yml
